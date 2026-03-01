@@ -1633,15 +1633,24 @@ case 'alive': {
 │ 🌟 Status   : Online
 │ 👑 Owner   : ${config.OWNER_NAME || 'ɢᴀɢᴀɴᴀ ᴀɴᴜʜᴀꜱ'}
 │ ⏳ Uptime  : ${hours}h ${minutes}m ${seconds}s
-│ ☁️ Platform : ${process.env.PLATFORM || 'Heroku'}
+│ ☁️ Platform : ${process.env.PLATFORM || 'RENDER'}
 │ 🔗 Prefix  : ${config.PREFIX}
 | 💪 Special thank : {'ᴄʜᴀᴍᴏᴅ ᴅᴇᴠ(ɢᴏᴛᴜᴋᴏʟᴀʏᴀ ᴍᴅ)'}
 ╰─────────────❀
 
 ✨ *About ${botName}* ✨
-⚡ Fast • Reliable • Smart  
-📥 Media Downloader  
-🎨 Creative Tools & Utilities  
+'✨ fαѕт • ѕιмρℓє • ρσωєяfυℓℓ'
+'📥 мє∂ια ∂σωиℓσα∂єя'
+'🎨 ¢яєαтινє тσσℓѕ'  
+'🔧 ѕмαят υтιℓιтιєѕ'
+'🌝σωи ¢υѕтαмιzαтισи вσт'
+'🗣️иєωѕ υρ∂αтєѕ'
+'👾gяσυρ ¢σммα∂ѕ,мαиαgємєитѕ'
+'🖤ѕтαтυѕ αυтσ ѕєєи αи∂ яєα¢т'
+'💥мαиу α∂ναиѕє∂ fυтυяєѕ'
+'🔮 α∂ναиѕє∂ 𝙰𝙸 ρσωєяє∂ ѕуѕтєм'
+'🛡 ѕє¢υяє & яєℓιαвℓє' 
+  
 
 💌 Powered by 𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 BOT 👑
 `;
