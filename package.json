@@ -1,7 +1,7 @@
 {
-  "name": "VenomMDBot",
+  "name": "𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈",
   "version": "1.0.0",
-  "description": "Venom MD Mini WhatsApp Bot with Multi-Number Support",
+  "description": "𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 Mini WhatsApp Bot with Multi-Number Support",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
