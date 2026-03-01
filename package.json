@@ -1,16 +1,16 @@
 {
-  "name": "𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈",
+  "name": "AURA-MINI",
   "version": "1.0.0",
-  "description": "𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 Mini WhatsApp Bot with Multi-Number Support",
+  "description": "AURA-MINI Mini WhatsApp Bot with Multi-Number Support",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-   "baileys": "npm:baileyz@^1.0.8",
+    "baileys": "npm:baileyz@^1.0.8",
     "express": "^4.18.2",
-    "puppeteer": "24.34.0",
+    "puppeteer": "^22.6.0",
     "form-data": "^4.0.2",
     "fs-extra": "^11.2.0",
     "sqlite3": "^5.1.7",
@@ -19,7 +19,7 @@
     "jimp": "^0.16.1",
     "sharp": "^0.34.5",
     "child_process": "^1.0.2",
-    "mongoose": "8.16.0",
+    "mongoose": "^8.0.0",
     "path": "^0.12.7",
     "moment-timezone": "^0.6.0",
     "axios": "^1.7.9",
@@ -53,3 +53,5 @@
   "author": "chama",
   "license": "MIT"
 }
+
+
