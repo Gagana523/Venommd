@@ -1,749 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AURA MD - V1 RENDER EDITION</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA MD - V1 FINAL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Share+Tech+Mono&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root { --blue: #00f2ff; --purple: #9d00ff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
+        body { background: #000; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; color: #fff; }
 
-<style>
-:root { --neon-blue: #00f2ff; --neon-purple: #9d00ff; --bg-black: #000; }
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; }
-body { background: var(--bg-black); height: 100vh; overflow: hidden; color: #fff; }
+        /* 1. INTRO - හරියටම මැදට */
+        #intro-screen {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 1s ease;
+        }
+        .intro-logo {
+            width: 140px; height: 140px; border-radius: 50%;
+            border: 3px solid var(--blue); box-shadow: 0 0 30px var(--blue);
+            animation: pulse 2s infinite; margin-bottom: 20px;
+        }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .intro-text { font-size: 26px; letter-spacing: 10px; text-shadow: 0 0 15px var(--blue); font-weight: 900; }
 
-/* 1. INTRO LOADER (6 SEC) */
-#intro-screen { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 1s; }
-.intro-logo { width: 140px; height: 140px; border-radius: 50%; border: 3px solid var(--neon-blue); box-shadow: 0 0 30px var(--neon-blue); animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        /* Background Matrix */
+        #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.3; }
 
-/* Matrix Background */
-#matrix-canvas { position: fixed; inset: 0; z-index: -1; filter: brightness(0.3); }
+        /* Main UI - පස්සේ පේන්න හදන්නේ */
+        #main-container {
+            display: none; flex-direction: column; align-items: center; 
+            width: 100%; opacity: 0; transition: opacity 1s ease;
+        }
 
-/* Main UI */
-#main-container { height: 100vh; display: none; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: opacity 1s; }
+        /* NEON CARD */
+        .neon-box {
+            position: relative; width: min(90%, 360px); padding: 3px;
+            background: linear-gradient(45deg, var(--blue), var(--purple));
+            border-radius: 30px; box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
+        }
+        .glass-card {
+            background: #0a0a0a; border-radius: 27px; padding: 30px 20px; text-align: center;
+        }
+        .card-logo { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--blue); margin-bottom: 15px; }
 
-/* NEON CARD ANIMATION */
-.neon-box { position: relative; width: min(92%, 380px); background: #000; border-radius: 40px; overflow: hidden; padding: 2px; }
-.neon-box::before { content: ""; position: absolute; width: 150%; height: 150%; background: conic-gradient(transparent, transparent, var(--neon-blue), var(--neon-purple)); animation: rotate 4s linear infinite; top: -25%; left: -25%; }
-@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-.glass-card { position: relative; width: 100%; background: rgba(10, 10, 10, 0.95); border-radius: 38px; padding: 35px 25px; text-align: center; z-index: 1; }
-.card-logo { width: 90px; height: 90px; border-radius: 50%; border: 2px solid var(--neon-blue); margin-bottom: 15px; }
-
-/* Inputs & Buttons */
-.input-box { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,242,255,0.2); border-radius: 12px; color: #fff; text-align: center; margin-bottom: 15px; outline: none; font-size: 16px; }
-.get-btn { width: 100%; padding: 15px; background: var(--neon-blue); border: none; border-radius: 12px; font-weight: 900; cursor: pointer; color: #000; transition: 0.3s; }
-.get-btn:hover { box-shadow: 0 0 20px var(--neon-blue); background: #fff; }
-
-.about-btn { background: none; border: 1px solid rgba(0, 242, 255, 0.3); color: var(--neon-blue); padding: 8px 18px; border-radius: 20px; font-size: 10px; cursor: pointer; margin-top: 15px; letter-spacing: 2px; }
-
-/* Music Player */
-.music-player { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; border: 2px solid var(--neon-blue); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; background: rgba(0,0,0,0.5); }
-.music-player.playing { animation: rotate 4s linear infinite; border-color: var(--neon-purple); }
-
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); display: none; justify-content: center; align-items: center; z-index: 2000; }
-.modal-content { width: min(92%, 450px); background: #080808; border: 1px solid var(--neon-blue); border-radius: 20px; padding: 25px; position: relative; }
-.close-modal { position: absolute; top: 15px; right: 15px; color: var(--neon-blue); cursor: pointer; font-size: 22px; }
-#typewriter-content { font-family: 'Share Tech Mono', monospace; font-size: 13px; line-height: 1.6; text-align: left; color: #ccc; }
-.special-font { font-family: 'Dancing Script', cursive; font-size: 22px; color: var(--neon-purple); display: block; margin: 8px 0; }
-</style>
+        /* Inputs */
+        .input-box {
+            width: 100%; padding: 14px; background: #1a1a1a; border: 1px solid #333;
+            border-radius: 12px; color: #fff; text-align: center; margin-bottom: 15px; outline: none;
+        }
+        .get-btn {
+            width: 100%; padding: 14px; background: var(--blue); border: none;
+            border-radius: 12px; font-weight: 900; cursor: pointer; color: #000;
+        }
+        #pair-result { margin-top: 15px; font-size: 24px; font-weight: 900; color: var(--blue); letter-spacing: 5px; }
+    </style>
 </head>
 <body>
 
-<div id="intro-screen">
-  <div style="text-align:center">
-    <img src="https://files.catbox.moe/317h3c.png" class="intro-logo"><br><br>
-    <h2 style="letter-spacing:10px; text-shadow:0 0 15px var(--neon-blue)">AURA MD</h2>
-  </div>
-</div>
-
-<canvas id="matrix-canvas"></canvas>
-<audio id="bg-track" loop><source src="https://files.catbox.moe/zko0jc.mp3" type="audio/mp3"></audio>
-
-<div class="music-player" id="musicBtn" onclick="toggleMusic()"><i class="fas fa-play" id="musicIcon" style="color:var(--neon-blue)"></i></div>
-
-<div id="main-container">
-  <h1 style="margin-bottom:20px; letter-spacing:8px; text-shadow:0 0 15px var(--neon-blue)">AURA MD</h1>
-  <div class="neon-box">
-    <div class="glass-card">
-      <img src="https://files.catbox.moe/317h3c.png" class="card-logo">
-      <p style="font-size:10px; color:var(--neon-blue); margin-bottom:20px; letter-spacing:2px">PAIRING INTERFACE V2.0</p>
-      <input type="number" id="number" class="input-box" placeholder="947xxxxxxxx">
-      <button class="get-btn" id="submitBtn">GET CODE</button>
-      <button class="about-btn" onclick="openModal()">ABOUT BOT</button>
-      <div id="pair-result" style="margin-top:20px"></div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-content">
-    <span class="close-modal" onclick="closeModal()">&times;</span>
-    <div id="typewriter-content"></div>
-  </div>
-</div>
-
-<script>
-// Matrix Logic
-const canvas = document.getElementById('matrix-canvas');
-const ctx = canvas.getContext('2d');
-let drops = [];
-function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drops = Array(Math.floor(canvas.width/20)).fill(1); }
-function draw() {
-  ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
-  ctx.font = "18px monospace";
-  drops.forEach((y, i) => {
-    ctx.fillStyle = Math.random() > 0.9 ? "#ff003c" : "#00f2ff";
-    ctx.fillText(String.fromCharCode(0x30A0 + Math.random()*96), i*20, y*20);
-    if(y*20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
-    drops[i]++;
-  });
-}
-window.onresize = init; init(); setInterval(draw, 50);
-
-// Intro transition
-window.onload = () => {
-  setTimeout(() => {
-    document.getElementById('intro-screen').style.opacity = '0';
-    setTimeout(() => {
-      document.getElementById('intro-screen').style.display = 'none';
-      const main = document.getElementById('main-container');
-      main.style.display = 'flex'; setTimeout(() => main.style.opacity = '1', 50);
-    }, 1000);
-  }, 6000);
-};
-
-// RENDER FETCH LOGIC
-document.getElementById("submitBtn").addEventListener("click", async () => {
-  const num = document.getElementById("number").value;
-  const res = document.getElementById("pair-result");
-  if(!num) { res.innerHTML = "<span style='color:orange; font-size:12px'>ENTER NUMBER!</span>"; return; }
-  res.innerHTML = "<span style='color:var(--neon-blue); font-size:12px'>GENERATING...</span>";
-  
-  try {
-    const response = await fetch(`/code?number=${num}`);
-    const data = await response.json();
-    if(data.code) {
-       res.innerHTML = `<span style="color:var(--neon-blue); letter-spacing:8px; font-size:28px; text-shadow: 0 0 15px var(--neon-blue); font-weight:900">${data.code}</span>`;
-    } else { res.innerHTML = "<span style='color:red; font-size:12px'>FAILED!</span>"; }
-  } catch(e) { res.innerHTML = "<span style='color:red; font-size:12px'>SERVER ERROR!</span>"; }
-});
-
-// Music & Modal
-const audio = document.getElementById('bg-track');
-function toggleMusic() {
-  if (audio.paused) { audio.play(); document.getElementById('musicBtn').classList.add('playing'); document.getElementById('musicIcon').className = 'fas fa-pause'; }
-  else { audio.pause(); document.getElementById('musicBtn').classList.remove('playing'); document.getElementById('musicIcon').className = 'fas fa-play'; }
-}
-
-const lines = [
-  { t: "Hello, Welcome to AURA-MD V1 PAIRING SITE", c: "" },
-  { t: "Developed by Gagana Anuhas", c: "special-font" },
-  { t: "--- BOT FEATURES ---", c: "feature-title" },
-  { t: "✨ fαѕт • ѕιмρℓє • ρσωєяfυℓℓ", c: "" },
-  { t: "📥 мє∂ια ∂σωиℓσα∂єя", c: "" },
-  { t: "🎨 ¢яєαтινє тσσℓѕ", c: "" },
-  { t: "🔧 ѕмαят υтιℓιтιєѕ", c: "" },
-  { t: "💥 мαиυ α∂ναиѕє∂ fυтυяєѕ", c: "" },
-  { t: "🔮 α∂ναиѕє∂ 𝙰𝙸 ρσωєяє∂ ѕуѕтєм", c: "" },
-  { t: "🛡 ѕє¢υяє & яєℓιαвℓє", c: "" },
-  { t: "🍁 gяσυρ мαиαgємєит", c: "" },
-  { t: "🗣️ иєωѕ υρ∂αтєѕ", c: "" },
-  { t: "🪶 ѕтαтυѕ αυтσ ѕєєи/ℓιкє", c: "" },
-  { t: "🌝σωи ¢υѕтוмιzαтισи вσт иαмє/ℓσgσ", c: "" }
-];
-
-function openModal() { document.getElementById('modalOverlay').style.display = 'flex'; document.getElementById('typewriter-content').innerHTML = ""; startType(0); }
-function startType(i) {
-  if (i >= lines.length) return;
-  const d = document.createElement('div'); if(lines[i].c) d.className = lines[i].c;
-  document.getElementById('typewriter-content').appendChild(d);
-  let cIdx = 0;
-  const term = setInterval(() => { d.textContent += lines[i].t[cIdx]; cIdx++; if(cIdx >= lines[i].t.length){ clearInterval(term); setTimeout(()=>startType(i+1), 150); }}, 30);
-}
-function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-</script>
-</body>
-</html>
-  height: 100vh; display: none; flex-direction: column;
-  justify-content: center; align-items: center; opacity: 0;
-  transition: opacity 1.5s ease;
-}
-
-.top-title {
-  font-size: clamp(28px, 7vw, 45px); letter-spacing: 10px;
-  text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 25px; text-transform: uppercase;
-}
-
-/* NEON CARD */
-.neon-box {
-  position: relative; width: min(92%, 380px);
-  background: rgba(0, 0, 0, 0.9); border-radius: 40px;
-  overflow: hidden; display: flex; justify-content: center; align-items: center;
-}
-.neon-box::before {
-  content: ""; position: absolute; width: 150%; height: 150%;
-  background: conic-gradient(transparent, transparent, transparent, var(--neon-blue), var(--neon-purple));
-  animation: rotateNeon 4s linear infinite;
-}
-.glass-card {
-  position: relative; inset: 2px; width: calc(100% - 4px);
-  background: rgba(10, 10, 10, 0.95); border-radius: 38px;
-  padding: 35px 25px; text-align: center; z-index: 1;
-}
-@keyframes rotateNeon { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-.card-logo { width: 95px; height: 95px; border-radius: 50%; border: 2px solid var(--neon-blue); margin: 0 auto 15px; }
-.bot-type-text { color: var(--neon-blue); font-size: 11px; letter-spacing: 2px; margin-bottom: 20px; display: block; }
-
-/* Input & Buttons */
-.input-box { width: 100%; padding: 16px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,242,255,0.3); border-radius: 12px; color: #fff; text-align: center; margin-bottom: 15px; outline: none; font-size: 16px; }
-.get-btn { width: 100%; padding: 16px; background: var(--neon-blue); border: none; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; transition: 0.3s; color: #000; }
-.get-btn:hover { background: #fff; box-shadow: 0 0 20px var(--neon-blue); }
-
-.about-btn { background: none; border: 1px solid rgba(0, 242, 255, 0.4); color: var(--neon-blue); padding: 8px 20px; border-radius: 20px; font-size: 11px; cursor: pointer; transition: 0.3s; margin-top: 15px; letter-spacing: 2px; }
-.about-btn:hover { background: rgba(0, 242, 255, 0.1); box-shadow: 0 0 10px var(--neon-blue); }
-
-/* MUSIC PLAYER */
-.music-player { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background: rgba(0, 0, 0, 0.6); border: 2px solid var(--neon-blue); border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; z-index: 1000; }
-.music-player.playing { animation: rotateMusic 4s linear infinite; border-color: var(--neon-purple); }
-@keyframes rotateMusic { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-/* Result Display */
-#pair-result { margin-top: 20px; min-height: 30px; font-weight: bold; }
-
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 2000; }
-.modal-content { width: min(92%, 480px); background: #080808; border: 1px solid var(--neon-blue); border-radius: 20px; padding: 30px; position: relative; max-height: 80vh; overflow-y: auto; }
-.close-modal { position: absolute; top: 15px; right: 15px; color: var(--neon-blue); cursor: pointer; font-size: 20px; }
-#typewriter-content { font-family: 'Share Tech Mono', monospace; font-size: 13px; line-height: 1.7; text-align: left; }
-.special-font { font-family: 'Dancing Script', cursive; font-size: 24px; color: var(--neon-purple); display: block; margin: 10px 0; }
-.feature-title { color: var(--neon-blue); font-weight: bold; margin-top: 12px; display: block; }
-</style>
-</head>
-
-<body>
-
-<div id="intro-screen">
-  <div class="intro-wrapper">
-    <img src="https://files.catbox.moe/317h3c.png" class="intro-logo">
-    <div class="intro-text">AURA MD</div>
-  </div>
-</div>
-
-<canvas id="matrix-canvas"></canvas>
-
-<audio id="bg-track" loop>
-  <source src="https://files.catbox.moe/zko0jc.mp3" type="audio/mp3">
-</audio>
-
-<div class="music-player" id="musicBtn" onclick="toggleMusic()">
-  <i class="fas fa-play" id="musicIcon" style="color: var(--neon-blue);"></i>
-</div>
-
-<div id="main-container">
-  <h1 class="top-title">AURA MD</h1>
-  <div class="neon-box">
-    <div class="glass-card">
-      <img src="https://files.catbox.moe/317h3c.png" class="card-logo">
-      <span class="bot-type-text">MULTIPLE WHATSAPP BOT</span>
-      <input type="number" id="number" class="input-box" placeholder="947xxxxxxxx">
-      <button class="get-btn" id="submitBtn">GET CODE</button>
-      <button class="about-btn" onclick="openModal()">ABOUT BOT</button>
-      <div id="pair-result"></div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-content">
-    <i class="fas fa-times close-modal" onclick="closeModal()"></i>
-    <div id="typewriter-content"></div>
-  </div>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
-<script>
-// Matrix Logic
-const mCanvas = document.getElementById('matrix-canvas');
-const mCtx = mCanvas.getContext('2d');
-let drops = [];
-function initMatrix() { mCanvas.width = window.innerWidth; mCanvas.height = window.innerHeight; drops = Array(Math.floor(mCanvas.width/20)).fill(1); }
-function drawMatrix() {
-  mCtx.fillStyle = 'rgba(0,0,0,0.05)'; mCtx.fillRect(0,0,mCanvas.width,mCanvas.height);
-  mCtx.font = "20px monospace";
-  drops.forEach((y, i) => {
-    mCtx.fillStyle = Math.random() > 0.9 ? "#ff003c" : "#00f2ff";
-    mCtx.fillText(String.fromCharCode(0x30A0 + Math.random()*96), i*20, y*20);
-    if(y*20 > mCanvas.height && Math.random() > 0.975) drops[i] = 0;
-    drops[i]++;
-  });
-}
-initMatrix(); setInterval(drawMatrix, 50);
-
-// Intro transition
-window.onload = () => {
-  setTimeout(() => {
-    const intro = document.getElementById('intro-screen');
-    const main = document.getElementById('main-container');
-    intro.style.opacity = '0';
-    setTimeout(() => { 
-      intro.style.display = 'none'; 
-      main.style.display = 'flex'; 
-      setTimeout(() => main.style.opacity = '1', 50); 
-    }, 1500);
-  }, 6000);
-};
-
-
-document.getElementById("submitBtn").addEventListener("click", async () => {
-  const num = document.getElementById("number").value;
-  const res = document.getElementById("pair-result");
-  
-  if(!num) {
-    res.innerHTML = "<span style='color:orange'>PLEASE ENTER NUMBER!</span>";
-    return;
-  }
-  
-  res.innerHTML = "<span style='color:var(--neon-blue)'>GENERATING CODE...</span>";
-  
-  try {
-    // ඔයාගේ API එකට Number එක යවනවා
-    const response = await axios.get(`/code?number=${num}`);
-    const code = response.data.code;
-    
-    if(code) {
-       res.innerHTML = `<span style="color:var(--neon-blue); letter-spacing:8px; font-size:26px; text-shadow: 0 0 10px var(--neon-blue);">${code}</span>`;
-    } else {
-       res.innerHTML = "<span style='color:red'>FAILED TO GET CODE!</span>";
-    }
-  } catch(e) {
-    console.error(e);
-    res.innerHTML = "<span style='color:red'>SERVER ERROR!</span>";
-  }
-});
-
-// Music Toggle
-const audio = document.getElementById('bg-track');
-const musicBtn = document.getElementById('musicBtn');
-function toggleMusic() {
-  if (audio.paused) { audio.play(); musicBtn.classList.add('playing'); document.getElementById('musicIcon').className = 'fas fa-pause'; }
-  else { audio.pause(); musicBtn.classList.remove('playing'); document.getElementById('musicIcon').className = 'fas fa-play'; }
-}
-
-// Modal & Typewriter
-const textLines = [
-  { text: "Hello, Welcome to AURA-MD V1 PAIRING SITE", class: "" },
-  { text: "Developed by Gagana Anuhas", class: "special-font" },
-  { text: "--- BOT FEATURES ---", class: "feature-title" },
-  { text: "✨ fαѕт • ѕιмρℓє • ρσωєяfυℓℓ", class: "" },
-  { text: "📥 мє∂ια ∂σωиℓσα∂єя", class: "" },
-  { text: "🎨 ¢яєαтινє тσσℓѕ", class: "" },
-  { text: "🔧 ѕмαят υтιℓιтιєѕ", class: "" },
-  { text: "💥 мαиυ α∂ναиѕє∂ fυтυяєѕ", class: "" },
-  { text: "🔮 α∂ναиѕє∂ 𝙰𝙸 ρσωєяє∂ ѕуѕтєм", class: "" },
-  { text: "🛡 ѕє¢υяє & яєℓιαвℓє", class: "" },
-  { text: "🍁 gяσυρ мαиαgємєит", class: "" },
-  { text: "🗣️ иєωѕ υρ∂αтєѕ", class: "" },
-  { text: "🪶 ѕтαтυѕ αυтσ ѕєєи/ℓιкє", class: "" },
-  { text: "🌝σωи ¢υѕтוмιzαтισи вσт иαмє/ℓσgσ", class: "" }
-];
-
-function openModal() { document.getElementById('modalOverlay').style.display = 'flex'; document.getElementById('typewriter-content').innerHTML = ""; startTypewriter(0); }
-function startTypewriter(idx) {
-  if (idx >= textLines.length) return;
-  const container = document.getElementById('typewriter-content');
-  const line = document.createElement('div');
-  if(textLines[idx].class) line.className = textLines[idx].class;
-  container.appendChild(line);
-  let charIdx = 0;
-  const interval = setInterval(() => { line.textContent += textLines[idx].text[charIdx]; charIdx++; if(charIdx >= textLines[idx].text.length) { clearInterval(interval); setTimeout(() => startTypewriter(idx + 1), 150); } }, 35);
-}
-function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-</script>
-
-</body>
-</html>
-  height: 100vh; display: none; flex-direction: column;
-  justify-content: center; align-items: center; opacity: 0;
-  transition: opacity 1.5s ease;
-}
-
-.top-title {
-  font-size: clamp(30px, 8vw, 50px); letter-spacing: 12px;
-  text-shadow: 0 0 20px var(--neon-blue); margin-bottom: 20px; text-transform: uppercase;
-}
-
-/* ===== NEON BORDER ANIMATED CARD ===== */
-.neon-box {
-  position: relative;
-  width: min(92%, 380px);
-  background: rgba(0, 0, 0, 0.9);
-  border-radius: 40px;
-  overflow: hidden; /* බෝඩර් ලයිට් එක එළියට නොයන්න */
-  display: flex; justify-content: center; align-items: center;
-}
-
-/* කැරකෙන ආලෝකය */
-.neon-box::before {
-  content: "";
-  position: absolute;
-  width: 150%; height: 150%;
-  background: conic-gradient(transparent, transparent, transparent, var(--neon-blue), var(--neon-purple));
-  animation: rotateNeon 4s linear infinite;
-}
-
-/* කාඩ් එකේ අභ්‍යන්තරය (Glass effect) */
-.glass-card {
-  position: relative;
-  inset: 2px; /* බෝඩරය පේන්න ඉඩ තැබීම */
-  width: calc(100% - 4px);
-  background: rgba(10, 10, 10, 0.95);
-  border-radius: 38px;
-  padding: 35px 25px;
-  text-align: center;
-  z-index: 1;
-}
-
-@keyframes rotateNeon {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.card-logo { width: 100px; height: 100px; border-radius: 50%; border: 2px solid var(--neon-blue); margin: 0 auto 15px; }
-.bot-type-text { color: var(--neon-blue); font-size: 11px; letter-spacing: 3px; margin-bottom: 25px; display: block; }
-
-.about-btn {
-  background: none; border: 1px solid rgba(0, 242, 255, 0.4);
-  color: var(--neon-blue); padding: 8px 20px; border-radius: 20px;
-  font-size: 11px; cursor: pointer; transition: 0.3s; margin-top: 15px; letter-spacing: 2px;
-}
-.about-btn:hover { background: rgba(0, 242, 255, 0.1); box-shadow: 0 0 10px var(--neon-blue); }
-
-/* MUSIC PLAYER */
-.music-player {
-  position: fixed; bottom: 25px; right: 25px;
-  width: 55px; height: 55px; background: rgba(0, 0, 0, 0.6);
-  border: 2px solid var(--neon-blue); border-radius: 50%;
-  display: flex; justify-content: center; align-items: center;
-  cursor: pointer; z-index: 1000; box-shadow: 0 0 15px var(--neon-blue);
-}
-.music-player.playing { animation: rotateMusic 4s linear infinite; border-color: var(--neon-purple); box-shadow: 0 0 20px var(--neon-purple); }
-
-/* Input & Button */
-.input-box { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid rgba(0,242,255,0.3); border-radius: 12px; color: #fff; text-align: center; margin-bottom: 15px; outline: none; }
-.get-btn { width: 100%; padding: 15px; background: var(--neon-blue); border: none; border-radius: 12px; font-weight: 900; cursor: pointer; }
-
-/* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 2000; }
-.modal-content { width: min(92%, 480px); background: #080808; border: 1px solid var(--neon-blue); border-radius: 20px; padding: 30px; position: relative; }
-.close-modal { position: absolute; top: 15px; right: 15px; color: var(--neon-blue); cursor: pointer; }
-#typewriter-content { font-family: 'Share Tech Mono', monospace; font-size: 13px; line-height: 1.7; text-align: left;}
-.special-font { font-family: 'Dancing Script', cursive; font-size: 24px; color: var(--neon-purple); display: block; margin: 10px 0; }
-.feature-title { color: var(--neon-blue); font-weight: bold; margin-top: 12px; display: block; }
-</style>
-</head>
-
-<body>
-
-<div id="intro-screen">
-  <div class="intro-wrapper">
-    <img src="https://files.catbox.moe/317h3c.png" class="intro-logo">
-    <div class="intro-text">AURA MD</div>
-  </div>
-</div>
-
-<canvas id="matrix-canvas"></canvas>
-
-<audio id="bg-track" loop>
-  <source src="https://files.catbox.moe/zko0jc.mp3" type="audio/mp3">
-</audio>
-
-<div class="music-player" id="musicBtn" onclick="toggleMusic()">
-  <i class="fas fa-play" id="musicIcon" style="color: var(--neon-blue);"></i>
-</div>
-
-<div id="main-container">
-  <h1 class="top-title">AURA MD</h1>
-  
-  <div class="neon-box">
-    <div class="glass-card">
-      <img src="https://files.catbox.moe/317h3c.png" class="card-logo">
-      <span class="bot-type-text">MULTIPLE WHATSAPP BOT</span>
-      <input type="number" id="number" class="input-box" placeholder="947xxxxxxxx">
-      <button class="get-btn" id="submit">GET CODE</button>
-      <button class="about-btn" onclick="openModal()">ABOUT BOT</button>
-      <div id="pair-result" style="margin-top: 20px;"></div>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal-content">
-    <i class="fas fa-times close-modal" onclick="closeModal()"></i>
-    <div id="typewriter-content"></div>
-  </div>
-</div>
-
-<script>
-const mCanvas = document.getElementById('matrix-canvas');
-const mCtx = mCanvas.getContext('2d');
-let drops = [];
-function initMatrix() { mCanvas.width = window.innerWidth; mCanvas.height = window.innerHeight; drops = Array(Math.floor(mCanvas.width/20)).fill(1); }
-function drawMatrix() {
-  mCtx.fillStyle = 'rgba(0,0,0,0.05)'; mCtx.fillRect(0,0,mCanvas.width,mCanvas.height);
-  mCtx.font = "20px monospace";
-  drops.forEach((y, i) => {
-    mCtx.fillStyle = Math.random() > 0.9 ? "#ff003c" : "#00f2ff";
-    mCtx.fillText(String.fromCharCode(0x30A0 + Math.random()*96), i*20, y*20);
-    if(y*20 > mCanvas.height && Math.random() > 0.975) drops[i] = 0;
-    drops[i]++;
-  });
-}
-initMatrix(); setInterval(drawMatrix, 50);
-
-window.onload = () => {
-  setTimeout(() => {
-    const intro = document.getElementById('intro-screen');
-    const main = document.getElementById('main-container');
-    intro.style.opacity = '0';
-    setTimeout(() => { intro.style.display = 'none'; main.style.display = 'flex'; setTimeout(() => main.style.opacity = '1', 50); }, 1500);
-  }, 6000);
-};
-
-const audio = document.getElementById('bg-track');
-const musicBtn = document.getElementById('musicBtn');
-function toggleMusic() {
-  if (audio.paused) { audio.play(); musicBtn.classList.add('playing'); document.getElementById('musicIcon').className = 'fas fa-pause'; }
-  else { audio.pause(); musicBtn.classList.remove('playing'); document.getElementById('musicIcon').className = 'fas fa-play'; }
-}
-
-const textLines = [
-  { text: "Hello, Welcome to AURA-MD V1 PAIRING SITE", class: "" },
-  { text: "Developed by Gagana Anuhas", class: "special-font" },
-  { text: "--- BOT FEATURES ---", class: "feature-title" },
-  { text: "✨ fαѕт • ѕιмρℓє • ρσωєяfυℓℓ", class: "" },
-  { text: "📥 мє∂ια ∂σωиℓσα∂єя", class: "" },
-  { text: "🎨 ¢яєαтινє тσσℓѕ", class: "" },
-  { text: "🔧 ѕмαят υтιℓιтιєѕ", class: "" },
-  { text: "💥 мαиυ α∂ναиѕє∂ fυтυяєѕ", class: "" },
-  { text: "🔮 α∂ναиѕє∂ 𝙰𝙸 ρσωєяє∂ ѕуѕтєм", class: "" },
-  { text: "🛡 ѕє¢υяє & яєℓιαвℓє", class: "" },
-  { text: "🍁 gяσυρ мαиαgємєит", class: "" },
-  { text: "🗣️ иєωѕ υρ∂αтєѕ", class: "" },
-  { text: "🪶 ѕтαтυѕ αυтσ ѕєєи/ℓιкє", class: "" },
-  { text: "🌝σωи ¢υѕтוмιzαтισи вσт иαмє/ℓσgσ", class: "" }
-];
-
-function openModal() { document.getElementById('modalOverlay').style.display = 'flex'; document.getElementById('typewriter-content').innerHTML = ""; startTypewriter(0); }
-function startTypewriter(idx) {
-  if (idx >= textLines.length) return;
-  const container = document.getElementById('typewriter-content');
-  const line = document.createElement('div');
-  if(textLines[idx].class) line.className = textLines[idx].class;
-  container.appendChild(line);
-  let charIdx = 0;
-  const interval = setInterval(() => { line.textContent += textLines[idx].text[charIdx]; charIdx++; if(charIdx >= textLines[idx].text.length) { clearInterval(interval); setTimeout(() => startTypewriter(idx + 1), 200); } }, 40);
-}
-function closeModal() { document.getElementById('modalOverlay').style.display = 'none'; }
-</script>
-</body>
-</html>
-.container{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
-
-/* ===== Box ===== */
-.box{
-  width:330px;
-  padding:25px;
-  background:rgba(0,0,0,0.7);
-  border-radius:15px;
-  text-align:center;
-  position:relative;
-}
-
-/* RGB Border */
-.box::before{
-  content:"";
-  position:absolute;
-  inset:-3px;
-  border-radius:18px;
-  background:linear-gradient(90deg,#00ffff,#00ff00,#ff00ff,#00ffff);
-  z-index:-1;
-  filter:blur(8px);
-  animation:borderRGB 5s linear infinite;
-}
-
-@keyframes borderRGB{
-  0%{filter:blur(6px);}
-  50%{filter:blur(12px);}
-  100%{filter:blur(6px);}
-}
-
-/* ===== RGB TITLE ===== */
-.rgb-text{
-  font-size:22px;
-  font-weight:bold;
-  animation:rgbTitle 3s linear infinite;
-}
-
-@keyframes rgbTitle{
-  0%{color:#00ffff;text-shadow:0 0 8px #00ffff;}
-  33%{color:#00ff00;text-shadow:0 0 8px #00ff00;}
-  66%{color:#ff00ff;text-shadow:0 0 8px #ff00ff;}
-  100%{color:#00ffff;text-shadow:0 0 8px #00ffff;}
-}
-
-h6{
-  color:#8ffcff;
-  margin-top:8px;
-}
-
-/* ===== Input ===== */
-.input-container{
-  display:flex;
-  margin-top:15px;
-}
-
-.input-container input{
-  width:70%;
-  height:45px;
-  border:none;
-  outline:none;
-  border-radius:10px 0 0 10px;
-  padding-left:10px;
-  font-size:16px;
-}
-
-.input-container button{
-  width:30%;
-  height:45px;
-  border:none;
-  border-radius:0 10px 10px 0;
-  background:#00ffff;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.input-container button:hover{
-  background:#00ffcc;
-}
-
-/* ===== Music Button (Side) ===== */
-.music-btn{
-  position:fixed;
-  right:15px;
-  bottom:25px;
-  background:#00ffff;
-  color:black;
-  padding:12px 18px;
-  border-radius:30px;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 0 15px #00ffff;
-  z-index:10;
-}
-
-.music-btn:hover{
-  background:#00ffcc;
-}
-</style>
-</head>
-
-<body>
-
-<!-- Background Video -->
-<video class="bg-video" autoplay muted loop>
-  <source src="https://files.catbox.moe/dlcamg.mp4" type="video/mp4">
-</video>
-
-<div class="container">
-  <div class="box">
-    <i class="fa fa-user" style="color:#00ffff;font-size:22px;"></i>
-
-    <div class="rgb-text">VENOM MD MINI BOT</div>
-    <h6>CREATED BY Anuhas</h6>
-    <h6>📢 Enter your number with country code</h6>
-
-    <div class="input-container">
-      <input type="number" id="number" placeholder="9476xxxxxxx">
-      <button id="submit">Submit</button>
+    <div id="intro-screen">
+        <img src="https://files.catbox.moe/317h3c.png" class="intro-logo">
+        <div class="intro-text">AURA MD</div>
     </div>
 
-    <main id="pair"></main>
-  </div>
-</div>
+    <canvas id="matrix-canvas"></canvas>
 
-<!-- Music -->
-<audio id="bgMusic" loop>
-  <source src="https://files.catbox.moe/zko0jc.mp3" type="audio/mp3">
-</audio>
+    <div id="main-container">
+        <h2 style="margin-bottom:20px; letter-spacing:5px; text-shadow:0 0 10px var(--blue);">AURA MD</h2>
+        <div class="neon-box">
+            <div class="glass-card">
+                <img src="https://files.catbox.moe/317h3c.png" class="card-logo">
+                <p style="font-size:10px; color:var(--blue); margin-bottom:15px;">V1 PAIRING INTERFACE</p>
+                <input type="number" id="number" class="input-box" placeholder="947xxxxxxxx">
+                <button class="get-btn" id="submitBtn">GET CODE</button>
+                <div id="pair-result"></div>
+            </div>
+        </div>
+    </div>
 
-<div class="music-btn" onclick="toggleMusic()" id="musicBtn">
-  ▶ Play
-</div>
+    <script>
+        // Matrix Effect
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        let drops = [];
+        function init() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; drops = Array(Math.floor(canvas.width/20)).fill(1); }
+        function draw() {
+            ctx.fillStyle = 'rgba(0,0,0,0.05)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.font = "15px monospace"; ctx.fillStyle = "#00f2ff";
+            drops.forEach((y, i) => {
+                ctx.fillText(String.fromCharCode(0x30A0 + Math.random()*96), i*20, y*20);
+                if(y*20 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        init(); setInterval(draw, 50);
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
+        // Intro Transition - Render වලට 100% වැඩ කරන විදිහට
+        window.onload = () => {
+            setTimeout(() => {
+                const intro = document.getElementById('intro-screen');
+                const main = document.getElementById('main-container');
+                intro.style.opacity = '0';
+                setTimeout(() => {
+                    intro.style.display = 'none';
+                    main.style.display = 'flex';
+                    setTimeout(() => { main.style.opacity = '1'; }, 50);
+                }, 1000);
+            }, 5000);
+        };
 
-<script>
-let a=document.getElementById("pair");
-let b=document.getElementById("submit");
-let c=document.getElementById("number");
-
-let music=document.getElementById("bgMusic");
-let musicBtn=document.getElementById("musicBtn");
-let started=false;
-
-/* Mobile safe autoplay */
-document.body.addEventListener("click",()=>{
-  if(!started){
-    music.play().then(()=>{
-      musicBtn.innerText="⏸ Pause";
-      started=true;
-    }).catch(()=>{});
-  }
-},{once:true});
-
-function toggleMusic(){
-  if(music.paused){
-    music.play();
-    musicBtn.innerText="⏸ Pause";
-  }else{
-    music.pause();
-    musicBtn.innerText="▶ Play";
-  }
-}
-
-async function Copy(){
-  let obj=document.getElementById("copy");
-  await navigator.clipboard.writeText(obj.innerText.replace('CODE: ',''));
-  obj.innerText="COPIED";
-}
-
-b.addEventListener("click",async(e)=>{
-  e.preventDefault();
-  if(!c.value){
-    a.innerHTML='<span style="color:white">Enter your WhatsApp number</span>';
-  }else if(c.value.replace(/[^0-9]/g,"").length<11){
-    a.innerHTML='<span style="color:red">Invalid Number</span>';
-  }else{
-    let number=c.value.replace(/[^0-9]/g,"");
-    a.innerHTML='<span style="color:white">Please wait...</span>';
-    let {data}=await axios(`/code?number=${number}`);
-    let code=data.code || "Unavailable";
-    a.innerHTML=`<div id="copy" onclick="Copy()" style="color:red;font-weight:bold">
-      CODE: <span style="color:white">${code}</span>
-    </div>`;
-  }
-});
-</script>
-
+        // GET CODE LOGIC
+        document.getElementById("submitBtn").addEventListener("click", async () => {
+            const num = document.getElementById("number").value;
+            const res = document.getElementById("pair-result");
+            if(!num) { res.innerHTML = "ENTER NUMBER!"; return; }
+            res.innerHTML = "WAIT...";
+            
+            try {
+                const response = await fetch(`/code?number=${num}`);
+                const data = await response.json();
+                res.innerHTML = data.code || "ERROR!";
+            } catch(e) { res.innerHTML = "SERVER ERROR!"; }
+        });
+    </script>
 </body>
 </html>
