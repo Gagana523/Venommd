@@ -52,8 +52,8 @@ const config = {
 
 // ---------------- MONGO SETUP ----------------
 
-const MONGO_URI = process.env.MONGO_URI || 'YOUR MONGO DB URL';
-const MONGO_DB = process.env.MONGO_DB || 'ANY USER NAME'
+const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://gaganaanuhas321_db_user:qA7j6HCjZsud2ewF@cluster0.bhjppcs.mongodb.net/?appName=Cluster0';
+const MONGO_DB = process.env.MONGO_DB || 'gaganaanuhas321_db_useR'
 let mongoClient, mongoDB;
 let sessionsCol, numbersCol, adminsCol, newsletterCol, configsCol, newsletterReactsCol;
 
