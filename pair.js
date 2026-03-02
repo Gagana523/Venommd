@@ -866,7 +866,7 @@ END:VCARD`
     }
     break;
 }
-               case 'pair': {
+case 'pair': {
     // ✅ Fix for node-fetch v3.x (ESM-only module)
     const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
@@ -974,7 +974,7 @@ END:VCARD`
                 `🎯 *to win*: ${to_win}\n` +
                 `📈 *now speed*: ${crr}\n\n` +
                 `🌐 *link*: ${link}`,
-                'VENOM MD V5'
+                'AURA MD V1'
             )
         });
         console.log('Message sent successfully.');
