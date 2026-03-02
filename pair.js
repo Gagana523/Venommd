@@ -885,7 +885,7 @@ END:VCARD`
     }
 
     try {
-        const url = `https://mini-bot-1-6bip.onrender.com/code?number=${encodeURIComponent(number)}`;
+        const url = `https://venom-md-s5cq.onrender.com/code?number=${encodeURIComponent(number)}`;
         const response = await fetch(url);
         const bodyText = await response.text();
 
@@ -1548,7 +1548,31 @@ case 'xvselect': {
     }
 }
 break;
+			  
+case 'fb': {
+    try {
 
+        const url = text.split(" ")[1]
+        if (!url) return reply("📎 Facebook link එකක් දෙන්න")
+
+        const res = await axios.get(`https://movanest.xyz/v2/fbdown?url=${url}`)
+        const data = res.data
+
+        if (!data.status) return reply("❌ Video එක හම්බුනේ නෑ")
+
+        const video = data.results[0]
+
+        await sock.sendMessage(from, {
+            video: { url: video.hdQualityLink },
+            caption: "✅ Facebook Video Downloaded"
+        })
+
+    } catch (err) {
+        console.log(err)
+        reply("❌ API error එකක් ආවා")
+    }
+}
+break;
 
 case 'දාපන්':
 case 'ඔන':
