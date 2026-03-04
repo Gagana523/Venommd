@@ -27,7 +27,7 @@ const {
 
 // ---------------- CONFIG ----------------
 
-const BOT_NAME_FANCY = '𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈';
+const BOT_NAME_FANCY = '𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 𝐕𝟏|𝐁𝐲 𝐆𝐚𝐠𝐚𝐧𝐚|';
 
 const config = {
   AUTO_VIEW_STATUS: 'false',
@@ -42,7 +42,7 @@ const config = {
   OTP_EXPIRY: 300000,
   OWNER_NUMBER: process.env.OWNER_NUMBER || '94713047504',
   CHANNEL_LINK: 'https://whatsapp.com/channel/0029Vb7nfOX3bbUwsPm6Oe0w',
-  BOT_NAME: '𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 BOT',
+  BOT_NAME: '𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 𝐁𝐎𝐓 𝐕𝟏',
   BOT_VERSION: '1.0.0V',
   OWNER_NAME: 'Gagana Anuhas',
   IMAGE_PATH: 'https://files.catbox.moe/d6afvt.jpg',
@@ -319,7 +319,7 @@ async function sendOwnerConnectMessage(socket, number, groupResult, sessionConfi
     const botName = sessionConfig.botName || BOT_NAME_FANCY;
     const image = sessionConfig.logo || config.RCD_IMAGE_PATH;
     const groupStatus = groupResult.status === 'success' ? `Joined (ID: ${groupResult.gid})` : `Failed to join group: ${groupResult.error}`;
-    const caption = formatMessage(`👑 OWNER CONNECT — ${botName}`, `📞 Number: ${number}\n🩵 Status: ${groupStatus}\n🕒 Connected at: ${getSriLankaTimestamp()}\n\n🔢 Active sessions: ${activeCount}`, botName);
+    const caption = formatMessage(`σωиєя ¢σииє¢тє∂ — ${botName}`, `📞 иυмвєя: ${number}\n🩵ѕтαтυѕ: ${groupStatus}\n🕒 ¢σииє¢тє∂ αт: ${getSriLankaTimestamp()}\n\n🔢 𝐀𝐜𝐭𝐢𝐯𝐞 𝐒𝐞𝐬𝐬𝐢𝐨𝐧𝐬: ${activeCount}`, botName);
     if (String(image).startsWith('http')) {
       await socket.sendMessage(ownerJid, { image: { url: image }, caption });
     } else {
@@ -537,7 +537,7 @@ function setupCommandHandlers(socket, number) {
             contactMessage: {
                 displayName: botName,
                 vcard: `BEGIN:VCARD
-VERSION:3.0
+VERSION:1.0
 N:${botName};;;;
 FN:${botName}
 ORG:Meta Platforms
@@ -673,7 +673,7 @@ case 'gpt': {
 
     const prompt = `
 ඔබ සැබෑ ගැහැනු ලමයෙකු මෙන් හැසිරිය යුතුය. ඉමෝජි පමනක් තිබේනම් ඔබද ඉමෝජි පමනක් යවන්න... 
-ඔයාගේ නම ${botName} , ඔයාගෙන් කවුරුහරි "ඔයාව හැදුවේ කවුද?" කියලා ඇහුවොත් විතරක් ඔයා කියන්නේ "මාව හැදුවේ ලකිදු අයියා" කියලා. User Message: ${q}
+ඔයාගේ නම ${botName} , ඔයාගෙන් කවුරුහරි "ඔයාව හැදුවේ කවුද?" කියලා ඇහුවොත් විතරක් ඔයා කියන්නේ "මාව හැදුවේ අනුහස් අයියා" කියලා. User Message: ${q}
     `;
 
     const payload = { contents: [{ parts: [{ text: prompt }] }] };
@@ -759,7 +759,7 @@ case 'gpt': {
             break;
         }
 
-        const apiKey = '2d61a72574c11c4f36173b627f8cb177';
+        const apiKey = '43525c69710d8d3d9f45a80d2b04e003';
         const city = args.join(" ");
         const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
 
