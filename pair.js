@@ -30,9 +30,9 @@ const {
 const BOT_NAME_FANCY = '𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 𝐕𝟏|𝐁𝐲 𝐆𝐚𝐠𝐚𝐧𝐚|';
 
 const config = {
-  AUTO_VIEW_STATUS: 'false',
-  AUTO_LIKE_STATUS: 'false',
-  AUTO_RECORDING: 'true',
+  AUTO_VIEW_STATUS:true,
+  AUTO_LIKE_STATUS:true,
+  AUTO_RECORDING:true,
   AUTO_LIKE_EMOJI: ['🔥','😀','👍','😃','😄','😁','😎','🥳','🌞','🌈','❤️'],
   PREFIX: '.',
   MAX_RETRIES: 3,
