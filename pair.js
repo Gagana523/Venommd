@@ -27,13 +27,13 @@ const {
 
 // ---------------- CONFIG ----------------
 
-const BOT_NAME_FANCY = '𝐀𝐔𝐑𝐀-𝐌𝐈𝐍𝐈 𝐕𝟏✨|𝐁𝐲 𝐆𝐚𝐠𝐚𝐧𝐚|';
+const BOT_NAME_FANCY = 'AurA 𝘔ÏǸÏ ʙ𝘰† 𝗩𝟭';
 
 const config = {
   AUTO_VIEW_STATUS: 'true',
   AUTO_LIKE_STATUS: 'true',
   AUTO_RECORDING: 'true',
-  AUTO_LIKE_EMOJI: ['🔥','😀','👍','😃','😄','😁','😎','🥳','🌞','🌈','❤️'],
+  AUTO_LIKE_EMOJI: ['🪶','🖤','❤️','💚','🍻','👘','🫧','💤','💦','🩸','🗿'],
   PREFIX: '.',
   MAX_RETRIES: 3,
   GROUP_INVITE_LINK: 'https://chat.whatsapp.com/EekDsKzbgyfACsN1uO0Ehe?mode=gi_t',
@@ -504,21 +504,42 @@ function setupCommandHandlers(socket, number) {
       switch (command) {
         // --- existing commands (deletemenumber, unfollow, newslist, admin commands etc.) ---
         // ... (keep existing other case handlers unchanged) ...
-          case 'ts': {
-    const axios = require('axios');
+ case 'ts': {
+   try {
+      const axios = require('axios')
 
-    const q = msg.message?.conversation ||
-              msg.message?.extendedTextMessage?.text ||
-              msg.message?.imageMessage?.caption ||
-              msg.message?.videoMessage?.caption || '';
+      const q = body.slice(prefix.length + command.length).trim()
 
-    let query = q.replace(/^[.\/!]ts\s*/i, '').trim();
+      if (!q) {
+         return await socket.sendMessage(from, {
+            text: '❗ TikTok link එකක් දෙන්න.'
+         }, { quoted: msg })
+      }
 
-    if (!query) {
-        return await socket.sendMessage(sender, {
-            text: '[❗] TikTok එකේ මොකද්ද බලන්න ඕනෙ කියපං! 🔍'
-        }, { quoted: msg });
-    }
+      // Example API (replace with your own API if needed)
+      const apiUrl = `https://api.tiklydown.me/api/download?url=${encodeURIComponent(q)}`
+
+      const { data } = await axios.get(apiUrl)
+
+      if (!data || !data.video) {
+         return await socket.sendMessage(from, {
+            text: '❌ Video එක ගන්න බැරි වුණා.'
+         }, { quoted: msg })
+      }
+
+      await socket.sendMessage(from, {
+         video: { url: data.video.noWatermark || data.video.watermark },
+         caption: '✅ Downloaded by your bot'
+      }, { quoted: msg })
+
+   } catch (err) {
+      console.log(err)
+      await socket.sendMessage(from, {
+         text: '❌ Error එකක් ආවා.'
+      }, { quoted: msg })
+   }
+}
+break;
 
     // 🔹 Load bot name dynamically
     const sanitized = (number || '').replace(/[^0-9]/g, '');
