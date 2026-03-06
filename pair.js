@@ -582,8 +582,8 @@ END:VCARD`
             video: { url: data.video.noWatermark },
             caption: `🎵 *TikTok Downloader*\n\n📌 *Title:* ${data.title || 'No Title'}\n👤 *Author:* ${data.author?.name || 'Unknown'}\n\nPowered by ${botName}`,
                 }, { quoted: shonux });
-    }
-    } catch (err) {
+       }
+			  {catch (err) {
         console.error('TikTok Search Error:', err);
         await socket.sendMessage(sender, { text: `❌ Error: ${err.message}` }, { quoted: shonux });
     }
